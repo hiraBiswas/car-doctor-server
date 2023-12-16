@@ -32,7 +32,7 @@ async function run() {
 
      const userCollection = client.db("truckNow").collection("users");
      const truckCollection = client.db("truckNow").collection("truck");
-    
+     const rentCollection = client.db("truckNow").collection("rent");
      
 
    // jwt related api
@@ -135,12 +135,12 @@ async function run() {
   });
 
 
-  // app.get('/menu/:id', async (req, res) => {
-  //   const id = req.params.id;
-  //   const query = { _id: new ObjectId(id) }
-  //   const result = await menuCollection.findOne(query);
-  //   res.send(result);
-  // })
+  app.get('/truck/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) }
+    const result = await truckCollection.findOne(query);
+    res.send(result);
+  })
 
   app.post('/truck', verifyToken, verifyAdmin, async (req, res) => {
     const item = req.body;
@@ -149,7 +149,19 @@ async function run() {
   });
 
 
-  
+  app.post('/rent',  async (req, res) => {
+    const item = req.body;
+    const result = await rentCollection.insertOne(item);
+    res.send(result);
+  });
+
+
+  app.get('/rent', async (req, res) => {
+    const result = await rentCollection.find().toArray();
+    res.send(result);
+  });
+
+
      // Send a ping to confirm a successful connection
      await client.db("admin").command({ ping: 1 });
      console.log("Pinged your deployment. You successfully connected to MongoDB!");
