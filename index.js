@@ -31,6 +31,7 @@ async function run() {
    
 
      const userCollection = client.db("truckNow").collection("users");
+     const truckCollection = client.db("truckNow").collection("truck");
     
      
 
@@ -125,6 +126,30 @@ async function run() {
     res.send(result);
   })
 
+
+
+  //for truck 
+  app.get('/truck', async (req, res) => {
+    const result = await truckCollection.find().toArray();
+    res.send(result);
+  });
+
+
+  // app.get('/menu/:id', async (req, res) => {
+  //   const id = req.params.id;
+  //   const query = { _id: new ObjectId(id) }
+  //   const result = await menuCollection.findOne(query);
+  //   res.send(result);
+  // })
+
+  app.post('/truck', verifyToken, verifyAdmin, async (req, res) => {
+    const item = req.body;
+    const result = await truckCollection.insertOne(item);
+    res.send(result);
+  });
+
+
+  
      // Send a ping to confirm a successful connection
      await client.db("admin").command({ ping: 1 });
      console.log("Pinged your deployment. You successfully connected to MongoDB!");
